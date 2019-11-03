@@ -1,0 +1,22 @@
+    - set_fact:
+        package_name: "{{ package.key }}"
+    - set_fact:
+        zip_file_name: "{{ package_name }}.zip"
+    - name: Creating Package {{ package_name }}
+      block:
+        - name: Create directory "{{ playbook_dir }}/{{ package_name }}"
+          file:
+            path: "{{ playbook_dir }}/{{ package_name }}"
+            state: directory
+          register: package_directory
+        - pip:
+            name: "{{ package.value.requirements }}"
+            chdir: "{{ package_directory }}"
+            extra_args: "--target={{ package_directory.path }}"
+        - archive:
+            path: "{{ package_directory.path }}/*"
+            dest: "{{ playbook_dir }}/{{ zip_file_name }}"
+            format: zip
+        - file:
+            path: "{{ package_directory }}"
+            state: absent

@@ -1,0 +1,11 @@
+---
+- hosts: localhost
+  gather_facts: no
+  connection: local
+
+  tasks:
+    - name: Create Lambda Layer Packages
+      include: lambda_layers.yml
+      with_dict: "{{ packages }}"
+      loop_control:
+        loop_var: package

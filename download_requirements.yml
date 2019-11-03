@@ -1,0 +1,8 @@
+    # - name: Downloading Requirements {{ package.key }}
+    - name: Installing Python Libraries for {{ package_name }}
+      debug:
+        var: requirements
+      # with_dict: "{{ requirements }}"
+      # loop_control:
+      #   loop_var: requirement
+
